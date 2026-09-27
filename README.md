@@ -126,7 +126,9 @@ Import this repository in [Vercel New Project](https://vercel.com/new). The incl
 | Install command       | `pnpm install --frozen-lockfile`                                  |
 | Build command         | `pnpm build`                                                      |
 | Output directory      | Next.js default                                                   |
-| Environment variables | None for device mode; two public values for optional account sync |
+| Environment variables | `ENABLE_EXPERIMENTAL_COREPACK=1`; two additional public values for optional account sync |
+
+Before the first deployment, add `ENABLE_EXPERIMENTAL_COREPACK` with value `1` in Vercel's Environment Variables section. This makes Vercel use the `pnpm@11.25.0` version pinned in `package.json`, rather than a default pnpm version. Select Node.js **22.x** in the project settings; leave the Next.js output directory at its default. See [Vercel's Corepack configuration](https://vercel.com/docs/builds/configure-a-build#corepack).
 
 Deploying requires a Vercel account with access to this GitHub repository. With an authenticated Vercel CLI you can also run `vercel --prod` from the project directory. After deployment, verify `/api/hackathons`, switch themes, and save/reload a practice attempt.
 
