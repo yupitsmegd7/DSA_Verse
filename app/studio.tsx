@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { QuestionLibrary, FunctionLab, ThemeToggle } from "./library";
 import {
   Appearance,
   SkillMap,
@@ -91,6 +92,8 @@ import {
 } from "@/lib/curriculum";
 
 type View =
+  | "library"
+  | "functions"
   | "studio"
   | "path"
   | "practice"
@@ -111,6 +114,8 @@ type Modal =
 type Save = (payload: Record<string, unknown>) => Promise<any>;
 const blank: Studio = { settings: defaults, attempts: [], lessons: [] };
 const navs: { id: View; label: string; icon: typeof Palette }[] = [
+  { id: "library", label: "Question atlas", icon: BookOpen },
+  { id: "functions", label: "Function laboratory", icon: Code2 },
   { id: "studio", label: "My studio", icon: LayoutDashboard },
   { id: "path", label: "Learning path", icon: Route },
   { id: "map", label: "Skill constellation", icon: Network },
@@ -265,7 +270,7 @@ function SideNav({
   );
 }
 export default function StudioApp() {
-  const [view, setView] = useState<View>("studio"),
+  const [view, setView] = useState<View>("library"),
     [data, setData] = useState<Studio>(blank),
     [loading, setLoading] = useState(true),
     [error, setError] = useState(""),
@@ -292,7 +297,7 @@ export default function StudioApp() {
   }
   useEffect(() => {
     void load();
-    const hash = location.hash.slice(1);
+    const hash = location.hash.slice(1).split("/")[0];
     if (navs.some((n) => n.id === hash)) setView(hash as View);
   }, []);
   function navigate(v: View) {
@@ -406,6 +411,8 @@ export default function StudioApp() {
     ),
     lessonDone = data.lessons.includes(rec.topic.id);
   const title = {
+    library: "Your question atlas",
+    functions: "Ideas, under the microscope",
     studio: "Your learning studio",
     path: "A path, painted for you",
     practice: "The practice gallery",
@@ -416,6 +423,8 @@ export default function StudioApp() {
     hackathons: "The hackathon observatory",
   }[view];
   const subtitle = {
+    library: "Original questions. Connected ideas. A path that grows with you.",
+    functions: "Understand the contract. Trace the state. Explain the return.",
     studio: "A fresh canvas. A little progress. All at your own pace.",
     path: "One concept builds on the next. Your results guide the pace.",
     practice: "A thoughtful mix of personal drills and real coding challenges.",
@@ -451,6 +460,7 @@ export default function StudioApp() {
             <strong>{navs.find((n) => n.id === view)?.label}</strong>
           </div>
           <div className="top-actions">
+            <ThemeToggle />
             <button
               className="storage-indicator"
               onClick={() => setModal({ type: "account" })}
@@ -504,6 +514,14 @@ export default function StudioApp() {
               <button onClick={load}>Retry</button>
             </div>
           )}
+          {view === "library" && (
+            <QuestionLibrary
+              data={data}
+              save={save}
+              onLab={() => navigate("functions")}
+            />
+          )}
+          {view === "functions" && <FunctionLab data={data} save={save} />}
           {view === "studio" && (
             <>
               <section className="hero">
@@ -871,10 +889,17 @@ export default function StudioApp() {
                     save={save}
                     busy={busy}
                     onReview={() =>
-                      openLesson(
-                        topics.find((t) => t.id === a.topic)!,
-                        true,
-                      )
+                      a.kind === "library"
+                        ? (history.replaceState(
+                            null,
+                            "",
+                            `#library/${a.outcome.split(":")[0]}`,
+                          ),
+                          setView("library"))
+                        : openLesson(
+                            topics.find((t) => t.id === a.topic)!,
+                            true,
+                          )
                     }
                   />
                 ))

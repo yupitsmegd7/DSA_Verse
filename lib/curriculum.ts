@@ -851,7 +851,7 @@ export function questionFor(
 export type Attempt = {
   id: string;
   topic: string;
-  kind: "drill" | "diagnostic" | "external";
+  kind: "drill" | "diagnostic" | "external" | "library";
   seed: number;
   correct: number;
   hint: number;

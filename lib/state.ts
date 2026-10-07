@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { exerciseById, sameAnswer } from "./library/catalog";
 import {
   defaults,
   topics,
@@ -19,7 +20,7 @@ export const settingsSchema = z.object({
 const attemptSchema = z.object({
   id: z.string().max(300),
   topic: z.string(),
-  kind: z.enum(["drill", "diagnostic", "external"]),
+  kind: z.enum(["drill", "diagnostic", "external", "library"]),
   seed: z.number().int().nonnegative().max(2147483647),
   correct: z.number().int().min(0).max(1),
   hint: z.number().int().min(0).max(1),
@@ -67,6 +68,53 @@ export function applyAction(
     const t = topics.find((t) => t.id === p.topic);
     if (!t) throw new Error("Unknown lesson.");
     data.lessons = [...new Set([...data.lessons, t.id])];
+  } else if (p.action === "library-attempt") {
+    const input = z
+      .object({
+        id: z.string(),
+        answer: z.string().min(1).max(4000),
+        hint: z.boolean(),
+        seconds: z.number().int().min(0).max(14400),
+      })
+      .parse(p);
+    const q = exerciseById.get(input.id);
+    if (!q) throw new Error("Unknown library exercise.");
+    try {
+      JSON.parse(input.answer);
+    } catch {
+      throw new Error("Enter a valid JSON answer, such as 7 or [1,2].");
+    }
+    const correct = sameAnswer(input.answer, q.answer);
+    const id = `library:${q.id}`;
+    if (!data.attempts.some((a) => a.id === id))
+      data.attempts = [
+        {
+          id,
+          topic: q.algorithm.lesson,
+          kind: "library" as const,
+          seed: q.number,
+          correct: +correct,
+          hint: +input.hint,
+          seconds: input.seconds,
+          created_at: new Date().toISOString(),
+          label: q.title,
+          reflection: "",
+          outcome: `${q.id}:${correct ? "correct" : "review"}`,
+        },
+        ...data.attempts,
+      ].slice(0, 10000);
+    if (correct)
+      data.attempts = data.attempts.map((a) =>
+        a.id === id && !a.correct ? { ...a, outcome: `${q.id}:reviewed` } : a,
+      );
+    return {
+      data,
+      result: {
+        correct,
+        answer: JSON.stringify(q.answer),
+        explanation: q.algorithm.idea,
+      },
+    };
   } else if (p.action === "attempt") {
     const a = z
       .object({

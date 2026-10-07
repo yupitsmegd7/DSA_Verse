@@ -121,7 +121,7 @@ export const themes = [
 export function ThemeChoices() {
   const [theme, setTheme] = useState("atelier");
   useEffect(() => {
-    setTheme(localStorage.getItem("dsa-theme") || "atelier");
+    setTheme(document.documentElement.dataset.theme || "atelier");
   }, []);
   function apply(id: string) {
     setTheme(id);

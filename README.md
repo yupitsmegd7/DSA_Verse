@@ -4,8 +4,9 @@
 
 # DSA Verse
 
-### The art of thinking. One good problem at a time.
+### A thousand small studies in the art of thinking.
 
+**1,000 original exercises · 25 topic collections · C, Java & Python**<br/>
 An adaptive learning atelier for data structures and algorithms.<br/>
 Read an idea. Trace it. Try it. Keep the lesson that the mistake taught you.
 
@@ -20,6 +21,42 @@ Read an idea. Trace it. Try it. Keep the lesson that the mistake taught you.
 </div>
 
 ---
+
+## The new question atlas
+
+> A question is a small canvas. An invariant is the line that holds it together.
+
+The home dashboard brings **1,000 original function-reasoning exercises** into one searchable collection. Browse by topic, level, progress, or bookmarks; follow a personal practice trail; open a question's contract, examples, hints, and reasoning notebook without leaving the studio.
+
+The count is deliberate and transparent: **50 algorithm families × 20 variations = 1,000 graded exercises**. Each family includes return tracing, input extension, paired calls with different parameters, prefix inputs, and boundary tests. These are parameterized studies, not 1,000 unrelated algorithms. No LeetCode problem statements were imported; standard DSA concepts naturally overlap other platforms.
+
+| Foundations                                  | Core structures                   | Advanced patterns                                     |
+| -------------------------------------------- | --------------------------------- | ----------------------------------------------------- |
+| Arrays, strings, hash maps                   | Linked lists, stacks, queues      | Graph traversal, shortest paths                       |
+| Two pointers, sliding windows, binary search | Binary trees, search trees, heaps | Disjoint sets, greedy algorithms, dynamic programming |
+| Recursion, backtracking, sorting             | Tries, matrices                   | Bit manipulation, number theory, intervals            |
+
+Each of the **25 collections contains 40 exercises**. Stable question IDs and links such as `#library/verse-0001` make a study easy to revisit.
+
+### The function laboratory
+
+Six interactive models explain accumulators, predicates, binary-search bounds, recursive stack frames, sliding windows, and Euclid's algorithm. Change the inputs, predict the return, step through execution, or play the trace. Inspect the variables and call stack alongside matching **C, Java, and Python** reference functions. Invalid preconditions produce an explanation, including unsorted binary-search input.
+
+The atelier guide provides local, curriculum-based explanations of contracts, invariants, complexity, and edge cases. It does not send questions to an AI service or claim to understand arbitrary submitted code.
+
+### Evidence that means something
+
+- First submissions are graded against deterministic reference evaluators and feed the existing learning path and constellation.
+- Hints, worked examples, and guide assistance reduce independence credit.
+- Retrying an exercise preserves its first-attempt score. A successful correction is marked **With guidance**; a fresh variation provides new mastery evidence.
+- Bookmarks and per-question reasoning notebooks use the existing device/cloud workspace and backup format.
+- Lab predictions are exploratory and do not inflate mastery.
+
+### A canvas after dusk
+
+The header's **Dark / Light** switch opens a midnight atelier: slate-blue paper, muted botanical accents, warm gold, and the original painting under moonlight. Existing palette choices are preserved. New visitors follow their system's color preference; an explicit theme choice persists across visits.
+
+The catalogue / guided practice / laboratory flow takes functional inspiration from [Deep-ML](https://www.deep-ml.com/). The DSA curriculum, exercises, branding, and interface here are original to DSA Verse.
 
 ## A studio built around your progress
 
@@ -62,7 +99,7 @@ The adaptive engine is transparent and deterministic. It does not require an AI 
 
 Mastery uses the **six most recent graded checks per topic**, with newer answers weighted more. Independent correct answers receive full credit; correct answers with hints receive 65% credit. A confidence factor ramps up over the first three checks. Incorrect answers receive no credit. Scores are learning signals, not a standardized rating or interview-readiness certificate.
 
-LeetCode outcomes are explicitly **self-reported** and do not inflate graded mastery. Original questions are generated from 48 teaching templates with variable inputs; they are not an unlimited AI-generated problem bank.
+LeetCode outcomes are explicitly **self-reported** and do not inflate graded mastery. The original lesson drills use 48 teaching templates. The separate question atlas adds 1,000 assessments from 50 algorithm families; neither collection is an unlimited AI-generated problem bank.
 
 ```mermaid
 flowchart TD
@@ -117,15 +154,15 @@ For a network that requires an HTTP proxy, configure the Node runtime's supporte
 
 Import this repository in [Vercel New Project](https://vercel.com/new). The included `vercel.json` selects Next.js and the pnpm install/build commands.
 
-| Setting               | Value                                                             |
-| --------------------- | ----------------------------------------------------------------- |
-| Repository            | `yupitsmegd7/DSA_Verse`                                           |
-| Production branch     | `main`                                                            |
-| Framework             | Next.js                                                           |
-| Root directory        | Repository root                                                   |
-| Install command       | `pnpm install --frozen-lockfile`                                  |
-| Build command         | `pnpm build`                                                      |
-| Output directory      | Next.js default                                                   |
+| Setting               | Value                                                                                    |
+| --------------------- | ---------------------------------------------------------------------------------------- |
+| Repository            | `yupitsmegd7/DSA_Verse`                                                                  |
+| Production branch     | `main`                                                                                   |
+| Framework             | Next.js                                                                                  |
+| Root directory        | Repository root                                                                          |
+| Install command       | `pnpm install --frozen-lockfile`                                                         |
+| Build command         | `pnpm build`                                                                             |
+| Output directory      | Next.js default                                                                          |
 | Environment variables | `ENABLE_EXPERIMENTAL_COREPACK=1`; two additional public values for optional account sync |
 
 Before the first deployment, add `ENABLE_EXPERIMENTAL_COREPACK` with value `1` in Vercel's Environment Variables section. This makes Vercel use the `pnpm@11.25.0` version pinned in `package.json`, rather than a default pnpm version. Select Node.js **22.x** in the project settings; leave the Next.js output directory at its default. See [Vercel's Corepack configuration](https://vercel.com/docs/builds/configure-a-build#corepack).
@@ -151,23 +188,27 @@ Device and account workspaces are separate. To move your work, export from the c
 
 ## Inside the frame
 
-| File or directory             | Purpose                                                          |
-| ----------------------------- | ---------------------------------------------------------------- |
-| `app/studio.tsx`              | Dashboard, sequential path, lessons, diagnostics, and journal    |
-| `app/features.tsx`            | Themes, graph, workbench, review queue, timer, news, and backups |
-| `app/globals.css`             | Painting-inspired design system and four theme palettes          |
-| `app/api/hackathons/route.ts` | Cached public news endpoint                                      |
-| `lib/curriculum.ts`           | Lessons, question templates, mastery, and recommendation rules   |
-| `lib/java.ts`                 | Java examples for every topic                                    |
-| `lib/state.ts`                | Validated workspace actions and backup merging                   |
-| `lib/storage.ts`              | IndexedDB persistence and optional Supabase sync                 |
-| `lib/news.ts`                 | RSS parsing, community ingestion, tagging, and deduplication     |
-| `supabase/schema.sql`         | Account storage and row-level security policies                  |
-| `tests/`                      | Regression tests for learning and ingestion behavior             |
+| File or directory             | Purpose                                                                    |
+| ----------------------------- | -------------------------------------------------------------------------- |
+| `app/studio.tsx`              | Dashboard, sequential path, lessons, diagnostics, and journal              |
+| `app/features.tsx`            | Themes, graph, workbench, review queue, timer, news, and backups           |
+| `app/globals.css`             | Painting-inspired design system and four theme palettes                    |
+| `app/api/hackathons/route.ts` | Cached public news endpoint                                                |
+| `lib/curriculum.ts`           | Lessons, question templates, mastery, and recommendation rules             |
+| `app/library.tsx`             | Question dashboard, exercise room, grounded guide, and function laboratory |
+| `lib/library/algorithms.ts`   | 50 original function contracts and reference evaluators                    |
+| `lib/library/catalog.ts`      | Stable 1,000-question catalogue, grading helpers, and recommendations      |
+| `lib/library/functions.ts`    | Six trace models and matching C, Java, Python references                   |
+| `lib/java.ts`                 | Java examples for every topic                                              |
+| `lib/state.ts`                | Validated workspace actions and backup merging                             |
+| `lib/storage.ts`              | IndexedDB persistence and optional Supabase sync                           |
+| `lib/news.ts`                 | RSS parsing, community ingestion, tagging, and deduplication               |
+| `supabase/schema.sql`         | Account storage and row-level security policies                            |
+| `tests/`                      | Regression tests for learning and ingestion behavior                       |
 
 ### Deliberate boundaries
 
-Code drafts are a learning scratchpad. **Code execution happens in the linked external compiler or on LeetCode**; this application does not run untrusted C/Java/Python or grade arbitrary submissions. LeetCode submissions are not imported automatically. There is no LLM chatbot, paid API dependency, background notification service, or automatic account provisioning.
+Code drafts are a learning scratchpad. **Arbitrary code execution happens in the linked external compiler or on LeetCode**; this application does not run untrusted C/Java/Python or grade arbitrary submissions. The function lab executes only the authored models, and the question atlas grades JSON return-value predictions. LeetCode submissions are not imported automatically. There is no LLM chatbot, paid API dependency, background notification service, or automatic account provisioning.
 
 The generated oil-painting illustration lives in `public/atelier-painting.webp`. UI primitives use shadcn/Radix and Lucide icons; the vendored stylesheet retains its upstream license in `vendor/`.
 
