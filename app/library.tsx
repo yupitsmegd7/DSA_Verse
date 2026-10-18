@@ -24,6 +24,7 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
+import { describeAnswerDifference } from "@/lib/library/experiments";
 import {
   Dialog,
   DialogContent,
@@ -90,7 +91,7 @@ export function QuestionLibrary({
 }: {
   data: Studio;
   save: Save;
-  onLab: () => void;
+  onLab: (algorithmId?: string) => void;
 }) {
   const [query, setQuery] = useState(""),
     [topic, setTopic] = useState("all"),
@@ -164,7 +165,7 @@ export function QuestionLibrary({
             >
               Continue my practice <ArrowRight size={16} />
             </button>
-            <button className="btn" onClick={onLab}>
+            <button className="btn" onClick={() => onLab()}>
               <FlaskConical size={16} /> Enter the function lab
             </button>
           </div>
@@ -514,6 +515,7 @@ export function QuestionLibrary({
               q={selected}
               data={data}
               save={save}
+              onExplore={() => onLab(selected.algorithm.id)}
               onNext={() => {
                 const next =
                   exercises.find(
@@ -555,11 +557,13 @@ function ExerciseRoom({
   data,
   save,
   onNext,
+  onExplore,
 }: {
   q: Exercise;
   data: Studio;
   save: Save;
   onNext: () => void;
+  onExplore: () => void;
 }) {
   const [answer, setAnswer] = useState(""),
     [hints, setHints] = useState(0),
@@ -656,7 +660,10 @@ function ExerciseRoom({
             <textarea
               id="return-answer"
               value={answer}
-              onChange={(e) => setAnswer(e.target.value)}
+              onChange={(e) => {
+                setAnswer(e.target.value);
+                setResult(null);
+              }}
               placeholder={
                 q.calls.length > 1
                   ? "[resultOfCall1, resultOfCall2, …]"
@@ -695,7 +702,9 @@ function ExerciseRoom({
                     : "A useful place to pause."}
                 </strong>
                 <p>
-                  {result.correct ? q.algorithm.invariant : q.algorithm.pitfall}
+                  {result.correct
+                    ? q.algorithm.invariant
+                    : `${describeAnswerDifference(answer, q.answer)} ${q.algorithm.pitfall}`}
                 </p>
                 {!result.correct && (
                   <details
@@ -839,6 +848,9 @@ function ExerciseRoom({
             Curriculum-based guidance. Runs locally, without a generative AI
             service.
           </small>
+          <button className="btn" onClick={onExplore}>
+            <FlaskConical size={16} /> Experiment with this function
+          </button>
           <div className="function-concept">
             <Target size={19} />
             <h4>Transfer, then master.</h4>
@@ -899,19 +911,13 @@ export function FunctionLab({ data, save }: { data: Studio; save: Save }) {
   }, [id, raw, k]);
   useEffect(() => {
     if (!playing) return;
-    const timer = setInterval(
-      () =>
-        setStep((s) => {
-          if (s >= trace.frames.length - 1) {
-            setPlaying(false);
-            return s;
-          }
-          return s + 1;
-        }),
-      850,
-    );
-    return () => clearInterval(timer);
-  }, [playing, trace.frames.length]);
+    if (step >= trace.frames.length - 1) {
+      setPlaying(false);
+      return;
+    }
+    const timer = setTimeout(() => setStep((s) => s + 1), 850);
+    return () => clearTimeout(timer);
+  }, [playing, step, trace.frames.length]);
   return (
     <div className="function-lab">
       <div className="lab-intro">
@@ -939,7 +945,7 @@ export function FunctionLab({ data, save }: { data: Studio; save: Save }) {
       </div>
       <div className="lab-grid">
         <aside className="lab-models">
-          <p className="library-overline">SIX GUIDED EXPERIMENTS</p>
+          <p className="library-overline">TEN GUIDED EXPERIMENTS</p>
           {functionModels.map((f, i) => (
             <button
               key={f.id}
@@ -950,7 +956,7 @@ export function FunctionLab({ data, save }: { data: Studio; save: Save }) {
                 if (f.id === "lower") setRaw("1, 3, 5, 5, 8");
               }}
             >
-              <span>0{i + 1}</span>
+              <span>{String(i + 1).padStart(2, "0")}</span>
               <div>
                 <strong>{f.name}()</strong>
                 <small>{f.title}</small>

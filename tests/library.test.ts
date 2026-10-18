@@ -149,7 +149,18 @@ test("library grading preserves first attempts, excludes retry inflation, valida
   assert.equal(libraryRecommendation(result.data)[0].id, q.id);
 });
 test("function traces finish with correct outputs, reject violated contracts, and emit three language references", () => {
-  const expected = { sum: 11, count: 2, lower: 2, fold: 7, window: 5, gcd: 1 };
+  const expected = {
+    sum: 11,
+    count: 2,
+    lower: 2,
+    fold: 7,
+    window: 5,
+    gcd: 1,
+    prefix: 4,
+    stack: 5,
+    inversions: 5,
+    spaced: 9,
+  };
   for (const f of functionModels) {
     const values = f.id === "lower" ? [1, 1, 3, 4, 5] : [3, 1, 4, 1, 2];
     const frames = f.run({ values, k: 2 });

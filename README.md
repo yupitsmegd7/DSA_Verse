@@ -40,7 +40,9 @@ Each of the **25 collections contains 40 exercises**. Stable question IDs and li
 
 ### The function laboratory
 
-Six interactive models explain accumulators, predicates, binary-search bounds, recursive stack frames, sliding windows, and Euclid's algorithm. Change the inputs, predict the return, step through execution, or play the trace. Inspect the variables and call stack alongside matching **C, Java, and Python** reference functions. Invalid preconditions produce an explanation, including unsorted binary-search input.
+Ten interactive models explain accumulators, predicates, binary-search bounds, recursive stack frames, sliding windows, Euclid's algorithm, prefix sums, stack commands, inversion counting, and dynamic programming. Change the inputs, predict the return, step through execution, or play the trace. Inspect the variables and call stack alongside matching **C, Java, and Python** reference functions. Invalid preconditions produce an explanation, including unsorted binary-search input.
+
+Every one of the **50 algorithm families** also has a contract playground: enter your own bounded inputs, predict a return, inspect a worked explanation, compare six boundary cases, save experiment notes, and jump directly to a fresh related question. A six-part function primer explains parameters, return values, references, invariants, and recursion.
 
 The atelier guide provides local, curriculum-based explanations of contracts, invariants, complexity, and edge cases. It does not send questions to an AI service or claim to understand arbitrary submitted code.
 
@@ -188,23 +190,26 @@ Device and account workspaces are separate. To move your work, export from the c
 
 ## Inside the frame
 
-| File or directory             | Purpose                                                                    |
-| ----------------------------- | -------------------------------------------------------------------------- |
-| `app/studio.tsx`              | Dashboard, sequential path, lessons, diagnostics, and journal              |
-| `app/features.tsx`            | Themes, graph, workbench, review queue, timer, news, and backups           |
-| `app/globals.css`             | Painting-inspired design system and four theme palettes                    |
-| `app/api/hackathons/route.ts` | Cached public news endpoint                                                |
-| `lib/curriculum.ts`           | Lessons, question templates, mastery, and recommendation rules             |
-| `app/library.tsx`             | Question dashboard, exercise room, grounded guide, and function laboratory |
-| `lib/library/algorithms.ts`   | 50 original function contracts and reference evaluators                    |
-| `lib/library/catalog.ts`      | Stable 1,000-question catalogue, grading helpers, and recommendations      |
-| `lib/library/functions.ts`    | Six trace models and matching C, Java, Python references                   |
-| `lib/java.ts`                 | Java examples for every topic                                              |
-| `lib/state.ts`                | Validated workspace actions and backup merging                             |
-| `lib/storage.ts`              | IndexedDB persistence and optional Supabase sync                           |
-| `lib/news.ts`                 | RSS parsing, community ingestion, tagging, and deduplication               |
-| `supabase/schema.sql`         | Account storage and row-level security policies                            |
-| `tests/`                      | Regression tests for learning and ingestion behavior                       |
+| File or directory                | Purpose                                                                     |
+| -------------------------------- | --------------------------------------------------------------------------- |
+| `app/studio.tsx`                 | Dashboard, sequential path, lessons, diagnostics, and journal               |
+| `app/features.tsx`               | Themes, graph, workbench, review queue, timer, news, and backups            |
+| `app/globals.css`                | Painting-inspired design system and four theme palettes                     |
+| `app/api/hackathons/route.ts`    | Cached public news endpoint                                                 |
+| `lib/curriculum.ts`              | Lessons, question templates, mastery, and recommendation rules              |
+| `app/academy.tsx`                | All-family function playgrounds and function foundations                    |
+| `lib/library/experiments.ts`     | Validated inputs, worked observations, boundary cases, and answer diagnosis |
+| `lib/library/extra-functions.ts` | Prefix-sum, stack, inversion, and DP traces                                 |
+| `app/library.tsx`                | Question dashboard, exercise room, grounded guide, and function laboratory  |
+| `lib/library/algorithms.ts`      | 50 original function contracts and reference evaluators                     |
+| `lib/library/catalog.ts`         | Stable 1,000-question catalogue, grading helpers, and recommendations       |
+| `lib/library/functions.ts`       | Ten trace models and matching C, Java, Python references                    |
+| `lib/java.ts`                    | Java examples for every topic                                               |
+| `lib/state.ts`                   | Validated workspace actions and backup merging                              |
+| `lib/storage.ts`                 | IndexedDB persistence and optional Supabase sync                            |
+| `lib/news.ts`                    | RSS parsing, community ingestion, tagging, and deduplication                |
+| `supabase/schema.sql`            | Account storage and row-level security policies                             |
+| `tests/`                         | Regression tests for learning and ingestion behavior                        |
 
 ### Deliberate boundaries
 

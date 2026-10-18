@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { QuestionLibrary, FunctionLab, ThemeToggle } from "./library";
+import { QuestionLibrary, ThemeToggle } from "./library";
+import { FunctionAcademy } from "./academy";
+import { exercises, exerciseStatus } from "@/lib/library/catalog";
 import {
   Appearance,
   SkillMap,
@@ -278,6 +280,7 @@ export default function StudioApp() {
     [busy, setBusy] = useState(false);
   const [mode, setMode] = useState<StorageMode>("choose"),
     [email, setEmail] = useState<string | undefined>();
+  const [labAlgorithm, setLabAlgorithm] = useState<string | undefined>();
   const dataRef = useRef(data);
   dataRef.current = data;
   async function load() {
@@ -518,10 +521,33 @@ export default function StudioApp() {
             <QuestionLibrary
               data={data}
               save={save}
-              onLab={() => navigate("functions")}
+              onLab={(id) => {
+                setLabAlgorithm(id);
+                navigate("functions");
+              }}
             />
           )}
-          {view === "functions" && <FunctionLab data={data} save={save} />}
+          {view === "functions" && (
+            <FunctionAcademy
+              data={data}
+              save={save}
+              initialAlgorithm={labAlgorithm}
+              onPractice={(id) => {
+                const candidates = exercises.filter(
+                  (q) => q.algorithm.id === id,
+                );
+                const q =
+                  candidates.find(
+                    (q) => exerciseStatus(data, q.id) === "untouched",
+                  ) || candidates[0];
+                if (q) {
+                  history.replaceState(null, "", `#library/${q.id}`);
+                  setView("library");
+                  window.scrollTo({ top: 0 });
+                }
+              }}
+            />
+          )}
           {view === "studio" && (
             <>
               <section className="hero">

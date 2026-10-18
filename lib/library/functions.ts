@@ -1,3 +1,4 @@
+import { extraFunctionModels } from "./extra-functions";
 import type { Input } from "./algorithms";
 export type Frame = {
   operation: string;
@@ -315,6 +316,7 @@ export const functionModels: FunctionModel[] = [
       ];
     },
   },
+  ...extraFunctionModels,
 ];
 export function functionCode(
   f: FunctionModel,
@@ -328,10 +330,12 @@ export function functionCode(
   const recursive = f.id === "fold";
   const body =
     language === "Java"
-      ? f.body.replaceAll(
-          "alternatingFold(values, n, i + 1)",
-          "alternatingFold(values, i + 1)",
-        )
+      ? f.body
+          .replace("int prefix[n + 1];", "int[] prefix = new int[n + 1];")
+          .replaceAll(
+            "alternatingFold(values, n, i + 1)",
+            "alternatingFold(values, i + 1)",
+          )
       : f.body;
   return (
     `${language === "Java" ? "static " : ""}int ${f.name}(${language === "C" ? "const int values[], int n" : "int[] values"}, int ${recursive ? "i" : "k"}) {\n${language === "Java" ? "    int n = values.length;\n" : ""}${body
